@@ -5,6 +5,8 @@ require("dotenv").config();
 const app = express();
 const http = require("http");
 const serverio = require("socket.io");
+const path = require("path");
+
 const port = process.env.PORT || 5000;
 
 // middleware
@@ -18,6 +20,10 @@ const io = serverio(server, {
     methods: ["GET", "POST"],
   },
 });
+
+const _dirName = path.dirname("");
+const buildPath = path.join(_dirName, "../client/dist");
+app.use(express.static(buildPath));
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2dhdxvg.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -45,7 +51,7 @@ async function run() {
     //connection socket
     io.on("connection", (socket) => {
       socket.on("sendMessage", async (messageInfo, receiverEmail) => {
-        console.log(messageInfo);
+        // console.log(messageInfo);
         socket.broadcast.emit(receiverEmail, messageInfo);
         await chatCollection.insertOne(messageInfo);
       });
@@ -66,7 +72,7 @@ async function run() {
     app.get("/user/:id", async (req, res) => {
       try {
         const query = { _id: new ObjectId(req.params.id) };
-        console.log(query);
+        // console.log(query);
 
         const users = await userCollection.findOne(query);
         res.status(200).send(users);
@@ -96,7 +102,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       const user = req.body;
       const query = { email: user.email };
-      console.log(user);
+      // console.log(user);
       const existingUser = await userCollection.findOne(query);
 
       if (existingUser) {
@@ -195,7 +201,7 @@ async function run() {
     });
 
     app.get("/messages", async (req, res) => {
-      console.log(req.query.m, req.query.f)
+      // console.log(req.query.m, req.query.f);
       const query = {
         $or: [
           { "sender.email": req.query.m, "receiver.email": req.query.f },
@@ -208,10 +214,10 @@ async function run() {
       };
       const result = await chatCollection.find(query, options).toArray();
       // console.log(result)
-      
+
       res.send(result);
     });
-    
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
