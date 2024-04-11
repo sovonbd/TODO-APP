@@ -5,7 +5,7 @@ require("dotenv").config();
 const app = express();
 const http = require("http");
 const serverio = require("socket.io");
-const path = require("path");
+// const path = require("path");
 
 const port = process.env.PORT || 5000;
 
@@ -16,14 +16,14 @@ app.use(cors());
 const server = http.createServer(app);
 const io = serverio(server, {
   cors: {
-    origin: "http://ec2-18-227-81-244.us-east-2.compute.amazonaws.com:5000",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
 
-const _dirName = path.dirname("");
-const buildPath = path.join(_dirName, "../client/dist");
-app.use(express.static(buildPath));
+// const _dirName = path.dirname("");
+// const buildPath = path.join(_dirName, "../client/dist");
+// app.use(express.static(buildPath));
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2dhdxvg.mongodb.net/?retryWrites=true&w=majority`;
 
