@@ -6,12 +6,14 @@ import facebookpng from "../../assets/facebook-96.png";
 import toast, { Toaster } from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const SocialLogin = () => {
   const { googleSignIn, githubSignIn, facebookSignIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  // const axiosPublic = useAxiosPublic();
+  const axiosPublic = useAxiosPublic();
+
   const from = location.state?.from?.pathname || "/";
   const handleGoogleSignIn = () => {
     googleSignIn()
@@ -23,7 +25,7 @@ const SocialLogin = () => {
           image: res.user?.photoURL,
         };
         // console.log(userInfo);
-        axios.post("http://localhost:5000/users", userInfo).then(() => {
+        axiosPublic.post("/users", userInfo).then(() => {
           // console.log(res.data);
         });
         toast.success("Successfully Logged in!");
@@ -43,7 +45,7 @@ const SocialLogin = () => {
           image: res.user?.photoURL,
         };
         // console.log(userInfo);
-        axios.post("http://localhost:5000/users", userInfo).then(() => {
+        axiosPublic.post("/users", userInfo).then(() => {
           // console.log(res.data);
         });
         toast.success("Successfully Logged in!");
@@ -63,7 +65,7 @@ const SocialLogin = () => {
           image: res.user?.photoURL,
         };
         // console.log(userInfo);
-        axios.post("http://localhost:5000/users", userInfo).then(() => {
+        axiosPublic.post("/users", userInfo).then(() => {
           // console.log(res.data);
         });
         toast.success("Successfully Logged in!");

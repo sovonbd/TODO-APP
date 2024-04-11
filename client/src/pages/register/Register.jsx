@@ -12,11 +12,13 @@ import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
   const [imageInfo, setImageInfo] = useState(null);
   const navigate = useNavigate();
   const { createUser, updateUserProfile } = useAuth();
+  const axiosPublic = useAxiosPublic();
 
   const {
     register,
@@ -45,7 +47,7 @@ const Register = () => {
             };
 
             // console.log(userInfo);
-            axios.post("http://localhost:5000/users", userInfo).then((res) => {
+            axiosPublic.post("/users", userInfo).then((res) => {
               if (res.data.insertedId) {
                 toast.success("Account created successfully!");
                 navigate("/");

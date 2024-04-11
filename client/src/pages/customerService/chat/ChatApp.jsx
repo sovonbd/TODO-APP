@@ -8,6 +8,7 @@ import ChatUser from "./ChatUser";
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
 import userHead from "../../../assets/user-head.png";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const ChatApp = () => {
   const { user, logOut } = useAuth();
@@ -15,9 +16,10 @@ const ChatApp = () => {
   const [datas, setDatas] = useState([]);
   const navigation = useNavigation();
   const [isShowProfile, setShowProfile] = useState(false);
+  const axiosPublic = useAxiosPublic();
 
   const fetchData = () => {
-    axios.get("http://localhost:5000/users").then(({ data }) => {
+    axiosPublic.get("/users").then(({ data }) => {
       const filterData = data.filter((singledata) => {
         return user?.email !== singledata.email;
       });
@@ -30,7 +32,7 @@ const ChatApp = () => {
   }, []);
 
   const serachUser = (searchTxt) => {
-    axios.get(`http://localhost:5000/users/${searchTxt}`).then(({ data }) => {
+    axiosPublic.get(`/users/${searchTxt}`).then(({ data }) => {
       const filterData = data.filter((singledata) => {
         return user.email !== singledata.email;
       });

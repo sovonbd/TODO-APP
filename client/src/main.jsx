@@ -12,8 +12,10 @@ import AboutUs from "./pages/aboutUs/AboutUs";
 import ChatApp from "./pages/customerService/chat/ChatApp";
 import ChatBox from "./pages/customerService/chat/ChatBox";
 import axios from "axios";
+import useAxiosPublic from "./hooks/useAxiosPublic";
 
 const queryClient = new QueryClient();
+const axiosPublic = useAxiosPublic();
 
 const router = createBrowserRouter([
   {
@@ -42,8 +44,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/chat/:id",
-            loader: ({ params }) =>
-              axios.get(`http://localhost:5000/user/${params.id}`),
+            loader: ({ params }) => axiosPublic.get(`/user/${params.id}`),
             element: (
               <PrivateRoute>
                 <ChatBox></ChatBox>
@@ -56,8 +57,7 @@ const router = createBrowserRouter([
       // mobile device handle rout
       {
         path: "/mchat/:id",
-        loader: ({ params }) =>
-          axios.get(`http://localhost:5000/user/${params.id}`),
+        loader: ({ params }) => axiosPublic.get(`/user/${params.id}`),
         element: (
           <PrivateRoute>
             <ChatBox></ChatBox>

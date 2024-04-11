@@ -9,6 +9,7 @@ import { format, parse } from "date-fns";
 import TodoNew from "./TodoNew";
 import TodoOngoing from "./TodoOngoing";
 import TodoCompleted from "./TodoCompleted";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Todo = () => {
   const [showModal, setShowModal] = useState(false);
@@ -18,11 +19,12 @@ const Todo = () => {
 
   const { user } = useContext(AuthContext);
   const { register, handleSubmit, reset } = useForm();
+  const axiosPublic = useAxiosPublic();
 
   const { isLoading, refetch } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/tasks/${user?.email}`);
+      const res = await axiosPublic.get(`/tasks/${user?.email}`);
       setTasks(res.data);
       return res.data;
     },
@@ -30,7 +32,7 @@ const Todo = () => {
 
   const { mutate } = useMutation({
     mutationFn: async (item) => {
-      const res = await axios.post("http://localhost:5000/createTask", item);
+      const res = await axiosPublic.post("/createTask", item);
       return res.data;
     },
     onSuccess: (data) => {
@@ -69,16 +71,14 @@ const Todo = () => {
       taskPriority: data.priority,
     };
 
-    axios
-      .patch(`http://localhost:5000/tasks/${selectedTask._id}`, updatedItem)
-      .then((res) => {
-        // console.log(res.data);
-        if (res.data.modifiedCount > 0) {
-          toast.success("Successfully updated!");
-          reset();
-        }
-        refetch();
-      });
+    axiosPublic.patch(`/tasks/${selectedTask._id}`, updatedItem).then((res) => {
+      // console.log(res.data);
+      if (res.data.modifiedCount > 0) {
+        toast.success("Successfully updated!");
+        reset();
+      }
+      refetch();
+    });
 
     setShowModal(false);
   };
@@ -90,7 +90,7 @@ const Todo = () => {
 
   const handleDelete = (id) => {
     // console.log(id);
-    axios.delete(`http://localhost:5000/${id}`).then((res) => {
+    axiosPublic.delete(`/${id}`).then((res) => {
       // console.log(res.data);
       if (res.data.deletedCount > 0) {
         toast.error("Task Deleted!");
@@ -100,14 +100,12 @@ const Todo = () => {
   };
 
   const handleNext = (id) => {
-    axios
-      .patch(`http://localhost:5000/update-tasks`, { id: id })
-      .then((res) => {
-        // console.log(res.data);
-        if (res.data.modifiedCount > 0) {
-          refetch();
-        }
-      });
+    axiosPublic.patch(`/update-tasks`, { id: id }).then((res) => {
+      // console.log(res.data);
+      if (res.data.modifiedCount > 0) {
+        refetch();
+      }
+    });
   };
 
   if (isLoading) {
@@ -143,7 +141,7 @@ const Todo = () => {
     }
 
     try {
-      await axios.patch(`http://localhost:5000/tasks/${draggedTask._id}`, {
+      await axiosPublic.patch(`/tasks/${draggedTask._id}`, {
         droppableId: draggedTask.droppableId,
       });
 

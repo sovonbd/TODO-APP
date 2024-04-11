@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 // Defining the Paypal component
 const Paypal = ({ showPaypalButton, setCheckout, refetch }) => {
@@ -16,13 +17,12 @@ const Paypal = ({ showPaypalButton, setCheckout, refetch }) => {
   // Ref for Paypal button container
   const paypal = useRef();
 
+  const axiosPublic = useAxiosPublic();
+
   // Mutation using react-query to handle subscription creation
   const { mutate } = useMutation({
     mutationFn: async (item) => {
-      const result = await axios.post(
-        "http://localhost:5000/subscriptions",
-        item
-      );
+      const result = await axiosPublic.post("/subscriptions", item);
       return result.data;
     },
     onSuccess: (data) => {

@@ -18,7 +18,7 @@ export const AuthContext = createContext(null);
 const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
-  const URL = "http://localhost:5000";
+  const URL = "http://ec2-18-227-81-244.us-east-2.compute.amazonaws.com:5000";
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);

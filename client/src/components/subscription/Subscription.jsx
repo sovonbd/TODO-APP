@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import Todo from "../Todo/Todo";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 // Defining the Subscription component
 const Subscription = () => {
@@ -12,6 +13,7 @@ const Subscription = () => {
   const [checkout, setCheckout] = useState(false);
   // Custom hook to get user information
   const { user } = useAuth();
+  const axiosPublic = useAxiosPublic();
 
   // Query to fetch subscription data
   const {
@@ -21,9 +23,7 @@ const Subscription = () => {
   } = useQuery({
     queryKey: ["subscription"],
     queryFn: async () => {
-      const result = await axios.get(
-        `http://localhost:5000/subscriptions/${user?.email}`
-      );
+      const result = await axiosPublic.get(`/subscriptions/${user?.email}`);
       return result.data;
     },
   });
