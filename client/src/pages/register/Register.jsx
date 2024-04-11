@@ -10,7 +10,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 import useAuth from "../../hooks/useAuth";
-import axios from "axios";
 import toast from "react-hot-toast";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
@@ -27,6 +26,7 @@ const Register = () => {
     reset,
   } = useForm();
 
+
   const onSubmit = async (data) => {
     if (imageInfo) {
       const name = data?.name;
@@ -36,7 +36,7 @@ const Register = () => {
       // console.log(name, email, password, imageUrl);
 
       createUser(email, password)
-        .then((res) => {
+        .then(() => {
           // console.log(res.user);
           updateUserProfile(name, imageUrl).then(() => {
             const userInfo = {
@@ -165,7 +165,7 @@ const Register = () => {
               <CloudinaryUploadWidget handleImageInfo={setImageInfo} />
               {imageInfo && (
                 <p className="text-white text-sm font-light">
-                  {imageInfo.original_filename}
+                  {imageInfo.slice(-10)}
                 </p>
               )}
             </div>
