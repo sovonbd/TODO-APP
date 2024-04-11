@@ -16,7 +16,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = serverio(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "http://ec2-18-227-81-244.us-east-2.compute.amazonaws.com:5000",
     methods: ["GET", "POST"],
   },
 });
